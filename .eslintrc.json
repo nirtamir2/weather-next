@@ -1,14 +1,17 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "sort-export-all"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended"
-    // Uncomment the following lines to enable eslint-config-prettier
-    // Is not enabled right now to avoid issues with the Next.js repo
-    // "prettier",
-    // "prettier/@typescript-eslint"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "prettier",
+    "prettier/@typescript-eslint"
   ],
   "env": {
     "es6": true,
@@ -39,6 +42,38 @@
       {
         "allow": ["warn", "error"]
       }
+    ],
+    "react-hooks/rules-of-hooks": 2,
+    "react-hooks/exhaustive-deps": 2,
+    "sort-export-all/sort-export-all": 0,
+    "import/order": [
+      2,
+      {
+        "groups": [
+          ["builtin", "external"],
+          "internal",
+          ["parent", "index", "sibling"]
+        ],
+        "pathGroups": [],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
     ]
+  },
+  "overrides": [
+    {
+      "files": ["src/**/index.{ts,js}"],
+      "rules": {
+        "sort-export-all/sort-export-all": 2
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

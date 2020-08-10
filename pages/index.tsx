@@ -1,4 +1,5 @@
 import Head from "next/head";
+
 import { useCityCurrentWeather } from "../api";
 
 export function Home() {

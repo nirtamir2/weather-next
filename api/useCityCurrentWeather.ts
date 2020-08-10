@@ -1,4 +1,5 @@
 import { QueryOptions, useQuery } from "react-query";
+
 import { CityT, ICityCurrentWeather } from "../types";
 import { fetchCityCurrentWeather } from "./fetch/fetchCityCurrentWeather";
 
