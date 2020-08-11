@@ -1,6 +1,8 @@
 import App, { AppProps } from "next/app";
 import React from "react";
 
+import "modern-css-reset";
+
 import "../styles/variables.css";
 import "../styles/global.css";
 

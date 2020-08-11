@@ -5,7 +5,6 @@ import { useCityCurrentWeather } from "../api";
 
 const containerCss = css`
   height: 100vh;
-  max-width: 1600px;
   margin: 0 auto;
 
   display: flex;
@@ -13,10 +12,11 @@ const containerCss = css`
 
   background-color: var(--theme-bg-color);
   overflow: hidden;
+ 
 `;
 
 const headerCss = css`
-  height: 80px;
+  height: var(--header-height);
   padding: var(--gutter);
 
   display: grid;
@@ -29,8 +29,7 @@ const headerCss = css`
 `;
 
 const headerTitleCss = css`
-  margin: 0;
-  font-size: 22px;
+  font-size: var(--font-size-title);
   color: var(--body-color);
 `;
 
@@ -46,7 +45,7 @@ const buttonCss = css`
   font-size: inherit;
   font-family: inherit;
 
-  transition-duration: var(--transition-fast);
+  transition-duration: var(--transition-duration-fast);
   transition-property: border-color, background-color;
 
   &:hover {
