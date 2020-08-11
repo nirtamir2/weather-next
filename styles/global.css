@@ -11,9 +11,13 @@ html {
 }
 
 body {
+  font-family: var(--body-font);
+  color: var(--body-color);
+  text-rendering: optimizeLegibility;
+
   background-color: var(--body-bg-color);
+
   -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }

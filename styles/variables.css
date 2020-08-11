@@ -1,4 +1,7 @@
 :root {
+  --gutter: 16px;
+  --gutterSmall: 10px;
+
   --body-bg-color: #e4e6f5;
   --border-color: #e5e4e9;
   --theme-bg-color: #fff;
@@ -12,4 +15,6 @@
   --unselected-mail: #f1f2f7;
   --calendar-border-color: #cbcfe0;
   --main-container-bg: #f0f0f7;
+
+  --transition-fast: 0.3s;
 }
