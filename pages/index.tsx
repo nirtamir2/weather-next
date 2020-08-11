@@ -116,8 +116,8 @@ export function Home() {
                   })}
                   style={{
                     animationDelay: `${index * 0.14}s`,
-                    backgroundPositionY: `${index * 100}px`,
-                    // backgroundRepeat: "no-repeat",
+                    backgroundPositionY: `${index * 10}%`,
+                    backgroundRepeat: "no-repeat",
                     backgroundSize: "auto 1000px",
                     background: `linear-gradient(to bottom, #df3341 0%,#d4f355 50%,#61c0ec 100%)`,
                   }}
