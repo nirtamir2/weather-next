@@ -20,5 +20,8 @@
 
   --transition-duration-fast: 0.3s;
 
+  --border-radius: 10px;
+  --border-radius-rounded: 1000px;
+
   --header-height: 80px;
 }

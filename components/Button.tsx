@@ -7,16 +7,16 @@ interface IProps {
 }
 
 const buttonCss = css`
-  border-radius: var(--gutter);
   padding: var(--gutterSmall);
-  background-color: var(--button-bg-color);
-  outline: none;
-
-  border: 1px solid transparent;
 
   color: var(--button-color);
   font-size: inherit;
   font-family: inherit;
+
+  background-color: var(--button-bg-color);
+  outline: none;
+  border-radius: var(--border-radius);
+  border: 1px solid transparent;
 
   transition-duration: var(--transition-duration-fast);
   transition-property: border-color, background-color;
