@@ -1,10 +1,10 @@
+import GoogleMapReact from "google-map-react";
 import { css } from "linaria";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import React from "react";
 
-import { useCityCurrentWeather } from "../api";
-import { Layout } from "../components";
+import { ConditionallyRender, Layout } from "../components";
 
 const FavoritesList = dynamic(
   async () => {
@@ -17,19 +17,16 @@ const FavoritesList = dynamic(
 );
 
 const containerCss = css`
-  min-height: 100vh;
   margin: 0 auto;
 
   display: flex;
   flex-direction: column;
 
   background-color: var(--theme-bg-color);
-  overflow: hidden;
 `;
 
 const contentCss = css`
   display: grid;
-  grid-gap: var(--gutter);
   grid-auto-flow: column;
   grid-template-columns: auto 1fr;
 `;
@@ -48,11 +45,17 @@ const CITIES = [
   "Jerusalem",
 ];
 
-export function Home() {
-  const { data, isLoading, error, isError, isSuccess } = useCityCurrentWeather(
-    "London"
-  );
+function Marker({
+  children,
+}: {
+  lat: number;
+  lng: number;
+  children: JSX.Element;
+}) {
+  return children;
+}
 
+export function Home() {
   const [cities, setCities] = React.useState<string[]>(CITIES);
 
   function handleChangeCities(cities: string[]) {
@@ -67,14 +70,30 @@ export function Home() {
       </Head>
       <Layout>
         <div className={contentCss}>
-          <FavoritesList cities={cities} onChangeCities={handleChangeCities} />
+          <ConditionallyRender client>
+            <FavoritesList
+              cities={cities}
+              onChangeCities={handleChangeCities}
+            />
+          </ConditionallyRender>
           <div>
-            <div>Map</div>
-            <div>
-              {isSuccess ? JSON.stringify(data) : null}
-              {isError ? JSON.stringify(error) : null}
-              {isLoading ? "Loading" : null}
-            </div>
+            <ConditionallyRender client>
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
+                }}
+                defaultCenter={{ lat: 32.017136, lng: 34.745441 }}
+                defaultZoom={7}
+              >
+                {cities.map((c) => {
+                  return (
+                    <Marker key={c} lat={32} lng={34.74}>
+                      <div>{c}</div>
+                    </Marker>
+                  );
+                })}
+              </GoogleMapReact>
+            </ConditionallyRender>
           </div>
         </div>
       </Layout>

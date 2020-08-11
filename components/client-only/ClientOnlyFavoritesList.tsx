@@ -30,7 +30,8 @@ const listItemCss = css`
   grid-auto-columns: auto;
   grid-auto-flow: column;
 
-  border-bottom: 2px solid transparent;
+  background-color: var(--theme-bg-color);
+  border-bottom: 1px solid var(--calendar-border-color);
 `;
 
 const listItemAnimatedCss = css`
@@ -56,6 +57,11 @@ const circleCss = css`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const scrollCss = css`
+  max-height: calc(100vh - var(--header-height));
+  overflow: auto;
 `;
 
 const droppableId = "droppableId";
@@ -123,7 +129,7 @@ export function ClientOnlyFavoritesList(props: IProps) {
       <Droppable droppableId={droppableId}>
         {(dropProvided) => {
           return (
-            <div>
+            <div className={scrollCss}>
               <ul
                 className={listCss}
                 {...dropProvided.droppableProps}
