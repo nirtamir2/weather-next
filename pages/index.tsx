@@ -17,8 +17,6 @@ const FavoritesList = dynamic(
 );
 
 const containerCss = css`
-  margin: 0 auto;
-
   display: flex;
   flex-direction: column;
 
