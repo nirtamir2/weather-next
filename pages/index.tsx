@@ -1,3 +1,4 @@
+import GoogleMapReact from "google-map-react";
 import { css } from "linaria";
 import Head from "next/head";
 import React from "react";
@@ -6,7 +7,8 @@ import Select from "react-select";
 import { useCityCurrentWeather } from "../api";
 import { Button, Layout } from "../components";
 import { FavoritesList } from "../components/FavoritesList";
-import { getTemperatureBackgroundColor } from "../components/getTemperatureBackgroundColor";
+import { Marker } from "../components/Marker";
+import { WeatherDetails } from "../components/WeatherDetails";
 import { ICityCurrentWeather } from "../types";
 
 const containerCss = css`
@@ -43,17 +45,30 @@ const detailsCss = css`
   padding: var(--gutter);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
   background-color: var(--theme-bg-color);
+`;
+
+const selectContainerCss = css`
+  display: grid;
+  grid-gap: var(--gutter);
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: start;
 `;
 
 const selectCss = css`
   width: 500px;
 `;
 
-const temperatureCss = css`
+const mapCss = css`
+  height: 400px;
+`;
+
+const markerCss = css`
   padding: var(--gutter);
-  font-size: 60px;
+  border-radius: var(--border-radius-rounded);
+  background-color: var(--theme-bg-color);
 `;
 
 export function Home() {
@@ -97,33 +112,41 @@ export function Home() {
             onChangeCities={handleChangeCities}
           />
           <div className={detailsCss}>
-            <div className={selectCss}>
-              <Select
-                defaultValue={CITIES[0]}
-                name="color"
-                options={CITIES}
-                value={selectedCity}
-                onChange={handleChangeSelectedCity}
-              />
+            <div className={selectContainerCss}>
+              <div className={selectCss}>
+                <Select
+                  name="color"
+                  options={CITIES}
+                  value={selectedCity}
+                  onChange={handleChangeSelectedCity}
+                />
+              </div>
+              {isFavoriteCity ? (
+                <Button onClick={addToFavorites}>Add To favorites</Button>
+              ) : null}
             </div>
             <div>
-              {isLoading ? <div>LOADING</div> : null}
-              {isSuccess ? (
-                <div>
-                  <div
-                    className={temperatureCss}
-                    style={{
-                      color: getTemperatureBackgroundColor(data.main.temp),
-                    }}
-                  >
-                    {data.main.temp}°
-                  </div>
-                  {isFavoriteCity ? (
-                    <Button onClick={addToFavorites}>Add To favorites</Button>
-                  ) : null}
-                </div>
-              ) : null}
+              {isLoading ? <div>Loading...</div> : null}
+              {isSuccess ? <WeatherDetails data={data} /> : null}
               {isError ? <div>{JSON.stringify(error)}</div> : null}
+            </div>
+            <div className={mapCss}>
+              <GoogleMapReact
+                bootstrapURLKeys={{
+                  key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
+                }}
+                defaultCenter={{ lat: 32.017136, lng: 34.745441 }}
+                defaultZoom={2}
+              >
+                {favoriteCities.map((c) => {
+                  const { lat, lon } = c.coord;
+                  return (
+                    <Marker key={c.id} lat={lat} lng={lon}>
+                      <div className={markerCss}>{c.name}</div>
+                    </Marker>
+                  );
+                })}
+              </GoogleMapReact>
             </div>
           </div>
         </div>
