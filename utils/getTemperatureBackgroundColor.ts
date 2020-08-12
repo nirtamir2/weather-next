@@ -1,4 +1,4 @@
-import { transformRange } from "../utils";
+import { transformRange } from "./index";
 
 export function getTemperatureBackgroundColor(temperature: number) {
   const MIN_TEMP = -5;

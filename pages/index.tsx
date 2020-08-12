@@ -7,14 +7,16 @@ import Select from "react-select";
 import { useCityCurrentWeather } from "../api";
 import StarIcon from "../assets/star-24px.svg";
 import StarOutlineIcon from "../assets/star_outline-24px.svg";
-import { Layout } from "../components";
-import { ButtonIcon } from "../components/ButtonIcon";
-import { FavoritesList } from "../components/FavoritesList";
-import { Marker } from "../components/Marker";
-import { WeatherDetails } from "../components/WeatherDetails";
-import { WeatherLoading } from "../components/WeatherLoading";
-import { getTemperatureBackgroundColor } from "../components/getTemperatureBackgroundColor";
+import {
+  Layout,
+  ButtonIcon,
+  FavoritesList,
+  Marker,
+  WeatherDetails,
+  WeatherLoading,
+} from "../components";
 import { ICityCurrentWeather } from "../types";
+import { getTemperatureBackgroundColor } from "../utils";
 
 const containerCss = css`
   display: flex;
@@ -30,23 +32,6 @@ const contentCss = css`
   grid-auto-flow: column;
   grid-template-columns: 400px 1fr;
 `;
-
-const CITIES = [
-  { value: "Tel Aviv", label: "Tel Aviv" },
-  { value: "Paris", label: "Paris" },
-  { value: "London", label: "London" },
-  { value: "Berlin", label: "Berlin" },
-  { value: "New York", label: "New York" },
-  { value: "Rome", label: "Rome" },
-  { value: "Madrid", label: "Madrid" },
-  { value: "Barcelona", label: "Barcelona" },
-  { value: "Moscow", label: "Moscow" },
-  { value: "Beijing", label: "Beijing" },
-  { value: "New Delhi", label: "New Delhi" },
-  { value: "Brasília", label: "Brasília" },
-  { value: "Bat Yam", label: "Bat Yam" },
-  { value: "Jerusalem", label: "Jerusalem" },
-];
 
 const detailsCss = css`
   border-radius: var(--border-radius);
@@ -85,6 +70,31 @@ const markerCss = css`
 `;
 
 const ICON_SIZE = 24;
+
+const googleMapsDefaultProps = {
+  bootstrapURLKeys: {
+    key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
+  },
+  defaultCenter: { lat: 32.017136, lng: 34.745441 },
+  defaultZoom: 2,
+};
+
+const CITIES = [
+  { value: "Tel Aviv", label: "Tel Aviv" },
+  { value: "Paris", label: "Paris" },
+  { value: "London", label: "London" },
+  { value: "Berlin", label: "Berlin" },
+  { value: "New York", label: "New York" },
+  { value: "Rome", label: "Rome" },
+  { value: "Madrid", label: "Madrid" },
+  { value: "Barcelona", label: "Barcelona" },
+  { value: "Moscow", label: "Moscow" },
+  { value: "Beijing", label: "Beijing" },
+  { value: "New Delhi", label: "New Delhi" },
+  { value: "Brasília", label: "Brasília" },
+  { value: "Bat Yam", label: "Bat Yam" },
+  { value: "Jerusalem", label: "Jerusalem" },
+];
 
 export function Home() {
   const [selectedCity, setSelectedCity] = React.useState(CITIES[0]);
@@ -159,23 +169,18 @@ export function Home() {
               {isError ? <div>{JSON.stringify(error)}</div> : null}
             </div>
             <div className={mapCss}>
-              <GoogleMapReact
-                bootstrapURLKeys={{
-                  key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
-                }}
-                defaultCenter={{ lat: 32.017136, lng: 34.745441 }}
-                defaultZoom={2}
-              >
+              <GoogleMapReact {...googleMapsDefaultProps}>
                 {favoriteCities.map((c) => {
                   const { lat, lon } = c.coord;
+                  const temperatureBackgroundColor = getTemperatureBackgroundColor(
+                    c.main.temp
+                  );
                   return (
                     <Marker key={c.id} lat={lat} lng={lon}>
                       <div
                         className={markerCss}
                         style={{
-                          backgroundColor: getTemperatureBackgroundColor(
-                            c.main.temp
-                          ),
+                          backgroundColor: temperatureBackgroundColor,
                         }}
                       >
                         {c.name}

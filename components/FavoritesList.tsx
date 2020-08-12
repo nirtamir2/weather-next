@@ -12,9 +12,9 @@ import {
 
 import DeleteIcon from "../assets/delete-24px.svg";
 import { ICityCurrentWeather } from "../types";
+import { getTemperatureBackgroundColor } from "../utils";
 import { ButtonIcon } from "./ButtonIcon";
 import { ConditionallyRender } from "./ConfitionallyRender";
-import { getTemperatureBackgroundColor } from "./getTemperatureBackgroundColor";
 
 interface IProps {
   cities: ICityCurrentWeather[];

@@ -2,7 +2,7 @@ import { css } from "linaria";
 import React from "react";
 
 import { ICityCurrentWeather } from "../types";
-import { getTemperatureBackgroundColor } from "./getTemperatureBackgroundColor";
+import { getTemperatureBackgroundColor } from "../utils";
 
 interface IProps {
   data: ICityCurrentWeather;
