@@ -36,6 +36,10 @@ const buttonCss = css`
 `;
 
 export function Button(props: IProps) {
-  const { children } = props;
-  return <button className={buttonCss}>{children}</button>;
+  const { children, onClick } = props;
+  return (
+    <button onClick={onClick} className={buttonCss}>
+      {children}
+    </button>
+  );
 }

@@ -1,4 +1,3 @@
-import cx from "classnames";
 import { css } from "linaria";
 import { move } from "ramda";
 import React from "react";
@@ -11,14 +10,25 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 
-import { transformRange } from "../../utils";
+import { ICityCurrentWeather } from "../types";
+import { ConditionallyRender } from "./ConfitionallyRender";
+import DeleteIcon from "./assets/delete-24px.svg";
+import { getTemperatureBackgroundColor } from "./getTemperatureBackgroundColor";
 
 interface IProps {
-  cities: string[];
-  onChangeCities: (cities: string[]) => void;
+  cities: ICityCurrentWeather[];
+  onChangeCities: (cities: ICityCurrentWeather[]) => void;
 }
 
-const CIRCLE_SIZE = 50;
+const CIRCLE_SIZE = 64;
+const ICON_SIZE = 24;
+
+const scrollCss = css`
+  padding: var(--gutter);
+  border-radius: var(--border-radius);
+  max-height: calc(100vh - var(--header-height));
+  overflow: auto;
+`;
 
 const listItemCss = css`
   padding: var(--gutter);
@@ -26,27 +36,18 @@ const listItemCss = css`
   display: grid;
   grid-gap: var(--gutter);
   align-items: center;
-  justify-content: space-between;
-  grid-auto-columns: auto;
-  grid-auto-flow: column;
-
+  grid-template-columns: auto 1fr auto;
   background-color: var(--theme-bg-color);
-  border-bottom: 1px solid var(--calendar-border-color);
-`;
 
-const listItemAnimatedCss = css`
-  animation: slideUp 0.6s both;
-  @keyframes slideUp {
-    0% {
-      transform: translateY(76px) scale(0.92);
-      opacity: 0;
-    }
-  }
+  border-bottom: 1px solid var(--calendar-border-color);
+  margin-bottom: var(--gutter);
 `;
 
 const listCss = css`
   list-style: none;
+  border-radius: var(--border-radius);
 `;
+
 const circleCss = css`
   height: ${CIRCLE_SIZE}px;
   width: ${CIRCLE_SIZE}px;
@@ -59,38 +60,40 @@ const circleCss = css`
   justify-content: center;
 `;
 
-const scrollCss = css`
-  max-height: calc(100vh - var(--header-height));
-  overflow: auto;
+const removeButtonCss = css`
+  padding: 0;
+
+  background: none;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+
+  color: var(--title-color);
+  cursor: pointer;
+
+  :hover {
+    color: var(--button-color);
+  }
 `;
+
+const temperatureCss = css`
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--main-color);
+`;
+
+const cityNameCss = css`
+  font-size: var(--font-size-title);
+  color: var(--body-color);
+`;
+
+const itemContentCss = css``;
 
 const droppableId = "droppableId";
 
-function getBackgroundColor(temperature: number) {
-  const MIN_TEMP = -5;
-  const MAX_TEMP = 40;
-
-  const MIN_HUE = 155;
-  const MAX_HUE = 355;
-
-  const hue = transformRange({
-    value: temperature,
-    inputRange: [MIN_TEMP, MAX_TEMP],
-    outputRange: [MIN_HUE, MAX_HUE],
-  });
-
-  return `hsl(${360 - hue},80%,60%)`;
-}
-
-export function ClientOnlyFavoritesList(props: IProps) {
+function ClientOnlyFavoritesList(props: IProps) {
   const { cities, onChangeCities } = props;
-  const [shouldAnimateList, setShouldAnimateList] = React.useState(true);
-
-  function handleListAnimationEnd(e: React.AnimationEvent<HTMLLIElement>) {
-    if (e.target === e.currentTarget) {
-      setShouldAnimateList(false);
-    }
-  }
 
   function handleDragStart() {
     // Add a little vibration if the browser supports it.
@@ -124,6 +127,10 @@ export function ClientOnlyFavoritesList(props: IProps) {
     onChangeCities(orderedCities);
   }
 
+  function handleRemoveItemFromFavorites(itemToRemove: ICityCurrentWeather) {
+    onChangeCities(cities.filter((c) => c.id !== itemToRemove.id));
+  }
+
   return (
     <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <Droppable droppableId={droppableId}>
@@ -137,52 +144,50 @@ export function ClientOnlyFavoritesList(props: IProps) {
               >
                 {cities.map((c, index) => {
                   return (
-                    <Draggable key={c} draggableId={c} index={index}>
+                    <Draggable key={c.id} draggableId={`${c.id}`} index={index}>
                       {(
                         dragProvided: DraggableProvided,
                         _dragSnapshot: DraggableStateSnapshot
                       ) => {
-                        const temperature = -20 + index * 6;
+                        const temperature = c.main.temp;
+                        const name = c.name;
                         return (
                           <li
-                            key={c}
-                            className={cx(listItemCss, {
-                              [listItemAnimatedCss]: shouldAnimateList,
-                            })}
+                            key={c.id}
+                            className={listItemCss}
                             {...dragProvided.draggableProps}
+                            {...dragProvided.dragHandleProps}
                             style={{
                               ...dragProvided.draggableProps.style,
-                              animationDelay: `${index * 0.14}s`,
+                              color: getTemperatureBackgroundColor(temperature),
                             }}
-                            onAnimationEnd={
-                              index === cities.length - 1
-                                ? (e) => handleListAnimationEnd(e)
-                                : undefined
-                            }
                             ref={dragProvided.innerRef}
                           >
                             <div
                               className={circleCss}
                               style={{
-                                backgroundColor: getBackgroundColor(
+                                backgroundColor: getTemperatureBackgroundColor(
                                   temperature
                                 ),
                               }}
                             >
-                              icon
+                              {temperature}°
                             </div>
-                            <div>{c}</div>
-                            <div>{temperature} °C</div>
-                            <div {...dragProvided.dragHandleProps}>
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                              >
-                                <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z" />
-                              </svg>
+                            <div className={itemContentCss}>
+                              <div className={cityNameCss}>{name}</div>
+                              <div className={temperatureCss}>
+                                {temperature}°
+                              </div>
                             </div>
+                            <button
+                              className={removeButtonCss}
+                              onClick={() => handleRemoveItemFromFavorites(c)}
+                            >
+                              <DeleteIcon
+                                height={ICON_SIZE}
+                                width={ICON_SIZE}
+                              />
+                            </button>
                           </li>
                         );
                       }}
@@ -196,5 +201,13 @@ export function ClientOnlyFavoritesList(props: IProps) {
         }}
       </Droppable>
     </DragDropContext>
+  );
+}
+
+export function FavoritesList(props: IProps) {
+  return (
+    <ConditionallyRender client>
+      <ClientOnlyFavoritesList {...props} />
+    </ConditionallyRender>
   );
 }

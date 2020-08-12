@@ -1,13 +1,13 @@
 import { QueryOptions, useQuery } from "react-query";
 
-import { CityT, ICityCurrentWeather } from "../types";
+import { ICityCurrentWeather } from "../types";
 import { fetchCityCurrentWeather } from "./fetch/fetchCityCurrentWeather";
 
 export function useCityCurrentWeather(
-  cityName: CityT,
+  cityName: string,
   config?: QueryOptions<ICityCurrentWeather>
 ) {
-  return useQuery<ICityCurrentWeather, ["cityCurrentWeather", CityT]>({
+  return useQuery<ICityCurrentWeather, ["cityCurrentWeather", string]>({
     queryKey: ["cityCurrentWeather", cityName],
     queryFn: fetchCityCurrentWeather,
     config,
