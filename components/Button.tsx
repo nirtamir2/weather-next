@@ -22,7 +22,6 @@ const buttonCss = css`
   transition-property: border-color, background-color;
 
   &:hover {
-    background-color: var(--body-bg-color);
     border-color: var(--button-color);
   }
 

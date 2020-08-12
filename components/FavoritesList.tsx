@@ -38,9 +38,9 @@ const listItemCss = css`
   grid-gap: var(--gutter);
   align-items: center;
   grid-template-columns: auto 1fr auto;
-  background-color: var(--theme-bg-color);
+  background-color: var(--bg-color);
 
-  border-bottom: 1px solid var(--calendar-border-color);
+  border-bottom: 1px solid var(--list-item-border-color);
   margin-bottom: var(--gutter);
 `;
 
@@ -62,9 +62,9 @@ const circleCss = css`
 `;
 
 const temperatureCss = css`
-  font-size: 14px;
+  font-size: var(--font-size-small);
   font-weight: 600;
-  color: var(--main-color);
+  color: var(--temperature-color);
 `;
 
 const cityNameCss = css`
@@ -72,28 +72,23 @@ const cityNameCss = css`
   color: var(--body-color);
 `;
 
-const itemContentCss = css``;
-
 const droppableId = "droppableId";
 
 function ClientOnlyFavoritesList(props: IProps) {
   const { cities, onChangeCities } = props;
 
   function handleDragStart() {
-    // Add a little vibration if the browser supports it.
     if (window.navigator.vibrate != null) {
       window.navigator.vibrate(100);
     }
   }
 
   function handleDragEnd(result: DropResult) {
-    // combining item
     if (result.combine) {
       onChangeCities(cities.filter((_, i) => i !== result.source.index));
       return;
     }
 
-    // dropped outside the list
     if (!result.destination) {
       return;
     }
@@ -135,6 +130,9 @@ function ClientOnlyFavoritesList(props: IProps) {
                       ) => {
                         const temperature = c.main.temp;
                         const name = c.name;
+                        const temperatureBackgroundColor = getTemperatureBackgroundColor(
+                          temperature
+                        );
                         return (
                           <li
                             key={c.id}
@@ -143,21 +141,19 @@ function ClientOnlyFavoritesList(props: IProps) {
                             {...dragProvided.dragHandleProps}
                             style={{
                               ...dragProvided.draggableProps.style,
-                              color: getTemperatureBackgroundColor(temperature),
+                              color: temperatureBackgroundColor,
                             }}
                             ref={dragProvided.innerRef}
                           >
                             <div
                               className={circleCss}
                               style={{
-                                backgroundColor: getTemperatureBackgroundColor(
-                                  temperature
-                                ),
+                                backgroundColor: temperatureBackgroundColor,
                               }}
                             >
                               {temperature}°
                             </div>
-                            <div className={itemContentCss}>
+                            <div>
                               <div className={cityNameCss}>{name}</div>
                               <div className={temperatureCss}>
                                 {temperature}°

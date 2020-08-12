@@ -24,7 +24,7 @@ const headerCss = css`
   align-items: center;
 
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--theme-bg-color);
+  background-color: var(--bg-color);
 `;
 
 const headerTitleCss = css`

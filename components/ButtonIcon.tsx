@@ -17,7 +17,7 @@ const buttonIconCss = css`
   justify-content: center;
 
   font: inherit;
-  color: var(--title-color);
+  color: var(--button-color);
 
   cursor: pointer;
 

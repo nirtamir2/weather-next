@@ -2,21 +2,21 @@
   --gutter: 16px;
   --gutterSmall: 10px;
 
+  --font-size-small: 14px;
   --font-size-title: 22px;
+  --font-size-large: 40px;
+  --font-size-huge: 60px;
+
+  --body-font: "Jost", sans-serif;
 
   --body-bg-color: #e4e6f5;
   --border-color: #e5e4e9;
-  --theme-bg-color: #fff;
+  --bg-color: #fff;
   --body-color: #1b1f31;
-  --main-color: #7a7e9d;
-  --main-light-color: #a1a4b9;
-  --title-color: #979dc3;
-  --body-font: "Jost", sans-serif;
+  --temperature-color: #7a7e9d;
   --button-bg-color: #eaeefc;
   --button-color: #4d76fd;
-  --unselected-mail: #f1f2f7;
-  --calendar-border-color: #cbcfe0;
-  --main-container-bg: #f0f0f7;
+  --list-item-border-color: #cbcfe0;
 
   --transition-duration-fast: 0.3s;
 

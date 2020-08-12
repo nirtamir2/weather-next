@@ -20,7 +20,7 @@ const containerCss = css`
   display: flex;
   flex-direction: column;
 
-  background-color: var(--theme-bg-color);
+  background-color: var(--bg-color);
 `;
 
 const contentCss = css`
@@ -54,7 +54,7 @@ const detailsCss = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: var(--theme-bg-color);
+  background-color: var(--bg-color);
 `;
 
 const selectContainerCss = css`
@@ -81,8 +81,10 @@ const markerCss = css`
   align-items: center;
   justify-content: center;
   border-radius: var(--border-radius-rounded);
-  background-color: var(--theme-bg-color);
+  background-color: var(--bg-color);
 `;
+
+const ICON_SIZE = 24;
 
 export function Home() {
   const [selectedCity, setSelectedCity] = React.useState(CITIES[0]);
@@ -145,9 +147,9 @@ export function Home() {
                 onClick={isFavoriteCity ? removeFromFavorites : addToFavorites}
               >
                 {isFavoriteCity ? (
-                  <StarIcon height={24} width={24} />
+                  <StarIcon height={ICON_SIZE} width={ICON_SIZE} />
                 ) : (
-                  <StarOutlineIcon height={24} width={24} />
+                  <StarOutlineIcon height={ICON_SIZE} width={ICON_SIZE} />
                 )}
               </ButtonIcon>
             </div>

@@ -8,16 +8,15 @@ interface IProps {
   data: ICityCurrentWeather;
 }
 
+const containerCSS = css`
+  height: 150px;
+`;
 const temperatureCss = css`
-  font-size: 60px;
+  font-size: var(--font-size-huge);
 `;
 
 const cityNameCss = css`
-  font-size: 40px;
-`;
-
-const containerCSS = css`
-  height: 150px;
+  font-size: var(--font-size-large);
 `;
 
 export function WeatherDetails(props: IProps) {
