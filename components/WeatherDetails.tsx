@@ -15,10 +15,15 @@ const temperatureCss = css`
 const cityNameCss = css`
   font-size: 40px;
 `;
+
+const containerCSS = css`
+  height: 150px;
+`;
+
 export function WeatherDetails(props: IProps) {
   const { data } = props;
   return (
-    <div>
+    <div className={containerCSS}>
       <div className={cityNameCss}>{data.name}</div>
       <div
         className={temperatureCss}

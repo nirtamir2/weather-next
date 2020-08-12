@@ -5,10 +5,15 @@ import React from "react";
 import Select from "react-select";
 
 import { useCityCurrentWeather } from "../api";
-import { Button, Layout } from "../components";
+import StarIcon from "../assets/star-24px.svg";
+import StarOutlineIcon from "../assets/star_outline-24px.svg";
+import { Layout } from "../components";
+import { ButtonIcon } from "../components/ButtonIcon";
 import { FavoritesList } from "../components/FavoritesList";
 import { Marker } from "../components/Marker";
 import { WeatherDetails } from "../components/WeatherDetails";
+import { WeatherLoading } from "../components/WeatherLoading";
+import { getTemperatureBackgroundColor } from "../components/getTemperatureBackgroundColor";
 import { ICityCurrentWeather } from "../types";
 
 const containerCss = css`
@@ -33,9 +38,12 @@ const CITIES = [
   { value: "Berlin", label: "Berlin" },
   { value: "New York", label: "New York" },
   { value: "Rome", label: "Rome" },
-  { value: "Dublin", label: "Dublin" },
   { value: "Madrid", label: "Madrid" },
   { value: "Barcelona", label: "Barcelona" },
+  { value: "Moscow", label: "Moscow" },
+  { value: "Beijing", label: "Beijing" },
+  { value: "New Delhi", label: "New Delhi" },
+  { value: "Brasília", label: "Brasília" },
   { value: "Bat Yam", label: "Bat Yam" },
   { value: "Jerusalem", label: "Jerusalem" },
 ];
@@ -58,15 +66,20 @@ const selectContainerCss = css`
 `;
 
 const selectCss = css`
-  width: 500px;
+  width: 200px;
 `;
 
 const mapCss = css`
-  height: 400px;
+  height: 100%;
 `;
 
 const markerCss = css`
+  height: 50px;
+  width: 50px;
   padding: var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--border-radius-rounded);
   background-color: var(--theme-bg-color);
 `;
@@ -80,7 +93,7 @@ export function Home() {
     selectedCity.value
   );
 
-  const isFavoriteCity = !favoriteCities.some(
+  const isFavoriteCity = favoriteCities.some(
     (c) => c.name === selectedCity.value
   );
 
@@ -89,6 +102,13 @@ export function Home() {
       return;
     }
     setFavoriteCities((c) => [...c, data]);
+  }
+
+  function removeFromFavorites() {
+    if (!isSuccess || data == null) {
+      return;
+    }
+    setFavoriteCities((c) => c.filter((c) => c.id !== data.id));
   }
 
   function handleChangeCities(cities: ICityCurrentWeather[]) {
@@ -121,12 +141,18 @@ export function Home() {
                   onChange={handleChangeSelectedCity}
                 />
               </div>
-              {isFavoriteCity ? (
-                <Button onClick={addToFavorites}>Add To favorites</Button>
-              ) : null}
+              <ButtonIcon
+                onClick={isFavoriteCity ? removeFromFavorites : addToFavorites}
+              >
+                {isFavoriteCity ? (
+                  <StarIcon height={24} width={24} />
+                ) : (
+                  <StarOutlineIcon height={24} width={24} />
+                )}
+              </ButtonIcon>
             </div>
             <div>
-              {isLoading ? <div>Loading...</div> : null}
+              {isLoading ? <WeatherLoading /> : null}
               {isSuccess ? <WeatherDetails data={data} /> : null}
               {isError ? <div>{JSON.stringify(error)}</div> : null}
             </div>
@@ -142,7 +168,16 @@ export function Home() {
                   const { lat, lon } = c.coord;
                   return (
                     <Marker key={c.id} lat={lat} lng={lon}>
-                      <div className={markerCss}>{c.name}</div>
+                      <div
+                        className={markerCss}
+                        style={{
+                          backgroundColor: getTemperatureBackgroundColor(
+                            c.main.temp
+                          ),
+                        }}
+                      >
+                        {c.name}
+                      </div>
                     </Marker>
                   );
                 })}

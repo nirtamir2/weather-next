@@ -10,9 +10,10 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 
+import DeleteIcon from "../assets/delete-24px.svg";
 import { ICityCurrentWeather } from "../types";
+import { ButtonIcon } from "./ButtonIcon";
 import { ConditionallyRender } from "./ConfitionallyRender";
-import DeleteIcon from "./assets/delete-24px.svg";
 import { getTemperatureBackgroundColor } from "./getTemperatureBackgroundColor";
 
 interface IProps {
@@ -58,23 +59,6 @@ const circleCss = css`
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const removeButtonCss = css`
-  padding: 0;
-
-  background: none;
-  border: none;
-  align-items: center;
-  justify-content: center;
-  font: inherit;
-
-  color: var(--title-color);
-  cursor: pointer;
-
-  :hover {
-    color: var(--button-color);
-  }
 `;
 
 const temperatureCss = css`
@@ -179,15 +163,14 @@ function ClientOnlyFavoritesList(props: IProps) {
                                 {temperature}°
                               </div>
                             </div>
-                            <button
-                              className={removeButtonCss}
+                            <ButtonIcon
                               onClick={() => handleRemoveItemFromFavorites(c)}
                             >
                               <DeleteIcon
                                 height={ICON_SIZE}
                                 width={ICON_SIZE}
                               />
-                            </button>
+                            </ButtonIcon>
                           </li>
                         );
                       }}
